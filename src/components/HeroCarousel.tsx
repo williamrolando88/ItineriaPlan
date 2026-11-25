@@ -57,7 +57,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   });
 
   return (
-    <main className="relative isolate min-h-[max(100svh,560px)] overflow-hidden bg-slate-950 text-white select-none">
+    <main className="relative isolate flex min-h-[max(100svh,560px)] flex-col overflow-hidden bg-slate-950 text-white select-none">
       {/* Fullscreen cross-fade background */}
       <div className="absolute inset-0 -z-20" aria-hidden="true">
         <AnimatePresence initial={false} mode="popLayout">
@@ -117,11 +117,11 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
       </aside>
 
       {/* Hero Stage */}
-      <div className="relative flex min-h-[calc(max(100svh,560px)-88px)] w-full flex-col justify-between gap-8 px-6 pb-16 pt-4 md:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:px-10 lg:pb-20">
+      <div className="relative grid flex-1 grid-cols-1 gap-8 px-6 pb-6 pt-4 md:px-8 md:pb-8 lg:grid-cols-[1fr_auto] lg:grid-rows-[1fr_auto] lg:gap-x-8 lg:gap-y-6 lg:px-10 lg:pb-10">
         {/* Main Hero Text (vertically centered on left) */}
         <section
           id="top"
-          className="relative z-10 w-full lg:flex-1 lg:pl-14"
+          className="relative z-10 w-full self-center lg:col-start-1 lg:row-start-1 lg:pl-14"
           aria-live="polite"
         >
           <AnimatePresence initial={false} mode="wait">
@@ -166,7 +166,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
 
         {/* Bottom-Left Social Links */}
         <div
-          className="absolute bottom-5 left-6 z-10 flex items-center gap-4 md:bottom-7 md:left-8 lg:left-10"
+          className="relative z-10 order-3 flex items-center gap-4 lg:order-none lg:col-start-1 lg:row-start-2 lg:self-end"
           aria-label="Social media"
         >
           <a
@@ -204,12 +204,12 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
 
         {/* Bottom-Right Upcoming Destination Cards + Controls */}
         <section
-          className="relative z-10 w-full lg:w-[336px] lg:shrink-0 lg:self-end xl:w-[580px] 3xl:w-[540px]"
+          className="relative z-10 w-full lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:w-[336px] lg:shrink-0 lg:self-end xl:w-[580px] 3xl:w-[640px]"
           aria-label="Upcoming destinations"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div className="hidden gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex md:justify-start md:gap-4">
+          <div className="flex gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:justify-start md:gap-4">
             <AnimatePresence initial={false} mode="popLayout">
               {upcomingSlides.map(({ slide, slideIndex }, order) => (
                 <DestinationCard

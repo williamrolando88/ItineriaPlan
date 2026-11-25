@@ -33,7 +33,7 @@ export function DestinationCard({
       whileHover={reduceMotion ? undefined : { y: -4 }}
       transition={{ duration: reduceMotion ? 0.15 : 0.5, ease: EASE_OUT_EXPO }}
       className={`group relative h-[190px] w-[142px] shrink-0 overflow-hidden rounded-2xl border border-white/15 shadow-2xl transition-colors duration-300 hover:border-white/40 sm:h-[220px] sm:w-[160px] md:h-[240px] md:w-[172px] lg:h-[248px] lg:w-[160px] xl:h-[260px] xl:w-[180px] 3xl:h-[300px] 3xl:w-[200px] ${
-        order >= 2 ? "hidden sm:block lg:hidden xl:block" : ""
+        order >= 2 ? "lg:hidden xl:block" : ""
       }`}
     >
       <button
