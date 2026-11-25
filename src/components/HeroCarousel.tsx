@@ -225,12 +225,11 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
       </aside>
 
       {/* Hero Stage */}
-      <div className="relative flex min-h-[calc(100svh-88px)] w-full items-center px-6 pb-28 pt-2 md:px-8 lg:px-10">
-
+      <div className="relative flex min-h-[calc(100svh-88px)] w-full flex-col justify-between gap-8 px-6 pb-16 pt-4 md:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:px-10 lg:pb-20">
         {/* Main Hero Text (vertically centered on left) */}
         <section
           id="top"
-          className="relative z-10 w-full pb-6 md:pl-10 lg:pl-14"
+          className="relative z-10 w-full md:pl-10 lg:flex-1 lg:pl-14"
           aria-live="polite"
         >
           <AnimatePresence initial={false} mode="wait">
@@ -240,7 +239,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -24 }}
               transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-              className="max-w-[540px]"
+              className="max-w-[540px] lg:max-w-[480px] xl:max-w-[500px] 3xl:max-w-[540px]"
             >
               <div className="mb-5 flex items-center gap-3">
                 <span className="rounded-md bg-blue-600 px-2.5 py-1 text-[10px] font-bold tracking-[0.14em]">
@@ -252,7 +251,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                 </span>
               </div>
 
-              <h1 className="max-w-[680px] text-5xl font-black leading-[0.94] tracking-[-0.055em] text-white sm:text-6xl md:text-7xl lg:text-[88px]">
+              <h1 className="max-w-[680px] text-4xl font-black leading-[0.94] tracking-[-0.055em] text-white sm:text-5xl md:text-6xl lg:text-[64px] xl:text-7xl 3xl:text-[88px]">
                 {current.title}
               </h1>
 
@@ -275,7 +274,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
 
         {/* Bottom-Left Social Links */}
         <div
-          className="absolute bottom-6 left-6 z-10 flex items-center gap-4 md:bottom-9 md:left-8 lg:left-10"
+          className="absolute bottom-5 left-6 z-10 flex items-center gap-4 md:bottom-7 md:left-8 lg:left-10"
           aria-label="Social media"
         >
           <a
@@ -307,7 +306,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
 
         {/* Bottom-Right Upcoming Destination Cards + Controls */}
         <section
-          className="absolute bottom-20 left-6 right-6 z-10 md:bottom-8 md:left-auto md:right-12 md:w-[min(58%,700px)] lg:right-16"
+          className="relative z-10 w-full lg:w-[336px] lg:shrink-0 lg:self-end xl:w-[580px] 3xl:w-[540px]"
           aria-label="Upcoming destinations"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
@@ -337,8 +336,8 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                     transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
                     onClick={() => setIndex(slideIndex)}
                     aria-label={`Preview ${slide.title}, ${slide.tag}, rated ${slide.rating}`}
-                    className={`group relative h-[190px] w-[142px] shrink-0 overflow-hidden rounded-2xl border border-white/15 text-left shadow-2xl transition-colors duration-300 hover:border-white/40 sm:h-[220px] sm:w-[160px] md:h-[270px] md:w-[180px] lg:h-[300px] lg:w-[200px] ${
-                      order >= 2 ? "hidden sm:block" : ""
+                    className={`group relative h-[190px] w-[142px] shrink-0 overflow-hidden rounded-2xl border border-white/15 text-left shadow-2xl transition-colors duration-300 hover:border-white/40 sm:h-[220px] sm:w-[160px] md:h-[240px] md:w-[172px] lg:h-[248px] lg:w-[160px] xl:h-[260px] xl:w-[180px] 3xl:h-[300px] 3xl:w-[200px] ${
+                      order >= 2 ? "hidden sm:block lg:hidden xl:block" : ""
                     }`}
                   >
                   <img
