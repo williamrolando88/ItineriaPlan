@@ -1,101 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import type React from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowDown,
-  Bookmark,
-  Menu,
-  Star,
-  X,
-} from "lucide-react";
-import { BrandIcon } from "./BrandIcon";
+import { ArrowLeft, ArrowRight, ArrowDown } from "lucide-react";
+import { DEFAULT_SLIDES, NAV_LINKS, type SlideItem } from "../data/hero";
+import { Navbar } from "./Navbar";
+import { DestinationCard } from "./DestinationCard";
 
-export interface SlideItem {
-  id: number;
-  tag: string;
-  title: string;
-  description: string;
-  ctaText: string;
-  rating: string;
-  bgImage: string;
-  cardImage: string;
-}
-
-const DEFAULT_SLIDES: SlideItem[] = [
-  {
-    id: 1,
-    tag: "INDONESIA",
-    title: "BALI ARCHIPELAGO",
-    description:
-      "Emerald rice terraces, sacred cliffside temples, and tranquil volcanic shores curated for travelers seeking culture, surf, and quiet luxury.",
-    ctaText: "EXPLORE TOUR",
-    rating: "4.9",
-    bgImage:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1920&q=80",
-    cardImage:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 2,
-    tag: "PERU",
-    title: "MACHU PICCHU",
-    description:
-      "Ancient Inca stonework high above the Sacred Valley, surrounded by cloud-forest ridges and timeless Andean mountain trails.",
-    ctaText: "START JOURNEY",
-    rating: "4.8",
-    bgImage:
-      "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1920&q=80",
-    cardImage:
-      "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 3,
-    tag: "GREECE",
-    title: "SANTORINI CLIFFS",
-    description:
-      "Whitewashed villages perched over the Aegean caldera, golden-hour sea breezes, and sun-drenched coastal retreats.",
-    ctaText: "BOOK TRIP",
-    rating: "4.9",
-    bgImage:
-      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1920&q=80",
-    cardImage:
-      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 4,
-    tag: "JAPAN",
-    title: "KYOTO TEMPLES",
-    description:
-      "Lantern-lit wooden alleys, centuries-old zen gardens, and seasonal cherry blossoms woven into Japan's cultural heartland.",
-    ctaText: "DISCOVER MORE",
-    rating: "4.7",
-    bgImage:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1920&q=80",
-    cardImage:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    id: 5,
-    tag: "ICELAND",
-    title: "REYKJAVIK AURORA",
-    description:
-      "Glacial lagoons, black-sand coastlines, and dancing northern lights under crisp subarctic skies.",
-    ctaText: "VIEW EXPEDITION",
-    rating: "5.0",
-    bgImage:
-      "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=1920&q=80",
-    cardImage:
-      "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=600&q=80",
-  },
-];
-
-const NAV_LINKS = [
-  { label: "Destinations", href: "#destinations" },
-  { label: "Tours", href: "#tours" },
-  { label: "Stories", href: "#stories" },
-  { label: "Contact", href: "#contact" },
-];
+export type { SlideItem };
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
@@ -106,7 +17,6 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   const [isPaused, setIsPaused] = useState(false);
   const [savedIds, setSavedIds] = useState<number[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedNav, setSelectedNav] = useState<string | null>(null);
 
   const nextSlide = useCallback(() => {
     setIndex((prev) => (prev + 1) % slides.length);
@@ -172,82 +82,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         aria-hidden="true"
       />
 
-      {/* Top Navbar */}
-      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-10">
-        <a
-          href="#top"
-          className="flex items-center gap-2.5 justify-self-start text-sm font-black tracking-[0.2em]"
-          aria-label="ItineriaPlan home"
-        >
-          <BrandIcon />
-          ITINERIA
-        </a>
-
-        <nav
-          className="hidden items-center gap-10 justify-self-center text-sm font-medium text-white/70 md:flex"
-          aria-label="Main navigation"
-        >
-          {NAV_LINKS.map((link) => (
-            <a key={link.href} className="transition hover:text-white" href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        <button
-          type="button"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          onClick={() => setMenuOpen((v) => !v)}
-          className="grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/20 md:hidden"
-        >
-          {menuOpen ? (
-            <X className="size-5" aria-hidden="true" />
-          ) : (
-            <Menu className="size-5" aria-hidden="true" />
-          )}
-        </button>
-
-        <div className="hidden lg:block" aria-hidden="true" />
-      </header>
-
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.nav
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            className="absolute right-6 top-20 z-30 flex w-max flex-col items-end gap-1 rounded-2xl border border-white/15 bg-slate-950/90 p-3 text-right backdrop-blur-xl md:hidden"
-            aria-label="Mobile navigation"
-          >
-            {NAV_LINKS.map((link) => {
-              const isSelected = selectedNav === link.href;
-              return (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  whileTap={{ scale: 0.96 }}
-                  transition={{ duration: 0.2 }}
-                  onClick={() => {
-                    setSelectedNav(link.href);
-                    setTimeout(() => {
-                      setMenuOpen(false);
-                      setSelectedNav(null);
-                    }, 200);
-                  }}
-                  className={`block w-full rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                    isSelected
-                      ? "bg-white/20 text-white"
-                      : "text-white/80 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  {link.label}
-                </motion.a>
-              );
-            })}
-          </motion.nav>
-        )}
-      </AnimatePresence>
+      <Navbar links={NAV_LINKS} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
 
       {/* Left Vertical Step Indicator (centered relative to full <main> section) */}
       <aside
@@ -369,75 +204,17 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         >
           <div className="hidden gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex md:justify-start md:gap-4">
             <AnimatePresence initial={false} mode="popLayout">
-              {upcomingSlides.map(({ slide, slideIndex }, order) => {
-                const isSaved = savedIds.includes(slide.id);
-                return (
-                  <motion.button
-                    key={slide.id}
-                    type="button"
-                    layout="position"
-                    initial={{ opacity: 0, x: 40, scale: 0.94 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                    exit={{ opacity: 0, x: -40, scale: 0.94 }}
-                    whileHover={{ y: -4 }}
-                    transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-                    onClick={() => setIndex(slideIndex)}
-                    aria-label={`Preview ${slide.title}, ${slide.tag}, rated ${slide.rating}`}
-                    className={`group relative h-[190px] w-[142px] shrink-0 overflow-hidden rounded-2xl border border-white/15 text-left shadow-2xl transition-colors duration-300 hover:border-white/40 sm:h-[220px] sm:w-[160px] md:h-[240px] md:w-[172px] lg:h-[248px] lg:w-[160px] xl:h-[260px] xl:w-[180px] 3xl:h-[300px] 3xl:w-[200px] ${
-                      order >= 2 ? "hidden sm:block lg:hidden xl:block" : ""
-                    }`}
-                  >
-                  <img
-                    src={slide.cardImage}
-                    alt={`${slide.title}, ${slide.tag}`}
-                    className="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <span className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/10 to-slate-950/15" />
-
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    aria-label={
-                      isSaved ? `Remove ${slide.title} bookmark` : `Bookmark ${slide.title}`
-                    }
-                    onClick={(e) => toggleSave(e, slide.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        toggleSave(e as unknown as React.MouseEvent, slide.id);
-                      }
-                    }}
-                    className={`absolute right-3 top-3 grid size-8 place-items-center rounded-full transition ${
-                      isSaved
-                        ? "bg-blue-600 text-white"
-                        : "bg-white/90 text-slate-900 hover:bg-white"
-                    }`}
-                  >
-                    <Bookmark
-                      className={`size-3.5 ${isSaved ? "fill-current" : ""}`}
-                      aria-hidden="true"
-                    />
-                  </span>
-
-                  <span className="absolute inset-x-4 bottom-4">
-                    <span className="mb-1 block text-[9px] font-bold tracking-[0.17em] text-white/70">
-                      {slide.tag}
-                    </span>
-                    <span className="block text-sm font-extrabold leading-tight text-white">
-                      {slide.title}
-                    </span>
-                    <span className="mt-2 flex items-center gap-1 text-[10px] font-medium text-white/90">
-                      <Star
-                        className="size-3 fill-amber-300 text-amber-300"
-                        aria-hidden="true"
-                      />
-                      {slide.rating}
-                      <span className="ml-auto text-white/60">{pad2(slide.id)}</span>
-                    </span>
-                  </span>
-                </motion.button>
-              );
-            })}
+              {upcomingSlides.map(({ slide, slideIndex }, order) => (
+                <DestinationCard
+                  key={slide.id}
+                  slide={slide}
+                  order={order}
+                  isSaved={savedIds.includes(slide.id)}
+                  indexLabel={pad2(slide.id)}
+                  onSelect={() => setIndex(slideIndex)}
+                  onToggleSave={toggleSave}
+                />
+              ))}
             </AnimatePresence>
           </div>
 
