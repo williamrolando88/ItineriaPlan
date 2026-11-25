@@ -5,9 +5,9 @@ import {
   ArrowRight,
   ArrowDown,
   Bookmark,
-  Flame,
   Star,
 } from "lucide-react";
+import { BrandIcon } from "./BrandIcon";
 
 export interface SlideItem {
   id: number;
@@ -175,9 +175,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           className="flex items-center gap-2.5 justify-self-start text-sm font-black tracking-[0.2em]"
           aria-label="ItineriaPlan home"
         >
-          <span className="grid size-9 place-items-center rounded-full border border-white/25 bg-white/10">
-            <Flame className="size-5 text-blue-400" aria-hidden="true" />
-          </span>
+          <BrandIcon />
           ITINERIA
         </a>
 
