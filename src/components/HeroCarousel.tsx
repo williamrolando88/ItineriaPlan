@@ -106,6 +106,8 @@ const NAV_LINKS = [
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
+const EASE_OUT_EXPO = [0.22, 1, 0.36, 1] as const;
+
 export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[] }) {
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -120,6 +122,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
     setIndex((prev) => (prev - 1 + slides.length) % slides.length);
   }, [slides.length]);
 
+  // Auto-advance every 5s unless user hovers the preview cards
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(nextSlide, 5000);
@@ -149,17 +152,13 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   });
 
   return (
-    <main
-      className="relative isolate min-h-svh overflow-hidden bg-slate-950 text-white select-none"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
+    <main className="relative isolate min-h-svh overflow-hidden bg-slate-950 text-white select-none">
       {/* Fullscreen cross-fade background */}
       <div className="absolute inset-0 -z-20" aria-hidden="true">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence initial={false} mode="popLayout">
           <motion.div
             key={current.id}
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0, scale: 1.06 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.9, ease: "easeInOut" }}
@@ -250,8 +249,8 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         )}
       </AnimatePresence>
 
-      {/* Main Content Area */}
-      <div className="relative mx-auto flex min-h-[calc(100svh-88px)] max-w-[1600px] flex-col justify-center gap-10 px-6 pb-20 pt-6 md:px-12 lg:flex-row lg:items-center lg:justify-between lg:px-16">
+      {/* Hero Stage */}
+      <div className="relative mx-auto flex min-h-[calc(100svh-88px)] max-w-[1600px] items-center px-6 pb-24 pt-8 md:px-12 lg:px-16">
         {/* Left Vertical Step Indicator */}
         <aside
           className="absolute left-6 top-1/2 hidden -translate-y-1/2 flex-col items-center md:flex lg:left-16"
@@ -286,19 +285,20 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           </span>
         </aside>
 
-        {/* Left Column: Hero Text */}
+        {/* Main Hero Text (vertically centered on left) */}
         <section
           id="top"
-          className="relative z-10 w-full max-w-[620px] md:pl-16 lg:pl-24"
+          className="relative z-10 w-full pb-6 md:pl-16 lg:pl-24"
           aria-live="polite"
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={current.id}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -40 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, y: -24 }}
+              transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+              className="max-w-[620px]"
             >
               <div className="mb-5 flex items-center gap-3">
                 <span className="rounded-md bg-blue-600 px-2.5 py-1 text-[10px] font-bold tracking-[0.14em]">
@@ -310,7 +310,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                 </span>
               </div>
 
-              <h1 className="max-w-[680px] text-5xl font-black leading-[0.94] tracking-[-0.055em] text-white sm:text-6xl md:text-7xl lg:text-[84px]">
+              <h1 className="max-w-[680px] text-5xl font-black leading-[0.94] tracking-[-0.055em] text-white sm:text-6xl md:text-7xl lg:text-[88px]">
                 {current.title}
               </h1>
 
@@ -335,32 +335,88 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           </AnimatePresence>
         </section>
 
-        {/* Right Column: Upcoming Destination Cards + Controls */}
-        <section className="relative z-10 flex flex-col gap-5 lg:items-end">
-          <div className="flex gap-4 overflow-x-auto pb-2 lg:overflow-visible lg:pb-0">
-            {upcomingSlides.map(({ slide, slideIndex }) => {
-              const isSaved = savedIds.includes(slide.id);
-              return (
-                <motion.button
-                  key={slide.id}
-                  type="button"
-                  layout
-                  onClick={() => setIndex(slideIndex)}
-                  aria-label={`Preview ${slide.title}, ${slide.tag}, rated ${slide.rating}`}
-                  className="group relative h-[210px] w-[150px] shrink-0 overflow-hidden rounded-2xl border border-white/15 text-left shadow-2xl transition duration-300 hover:-translate-y-1 hover:border-white/40 sm:h-[240px] sm:w-[170px] lg:h-[290px] lg:w-[195px]"
-                >
+        {/* Bottom-Left Social Links */}
+        <div
+          className="absolute bottom-6 left-6 z-10 flex items-center gap-4 md:bottom-9 md:left-12 lg:left-16"
+          aria-label="Social media"
+        >
+          <a
+            href="https://facebook.com"
+            aria-label="Facebook"
+            className="text-sm font-bold text-white/60 transition hover:text-white"
+          >
+            f
+          </a>
+          <a
+            href="https://twitter.com"
+            aria-label="Twitter"
+            className="text-xs font-bold text-white/60 transition hover:text-white"
+          >
+            𝕏
+          </a>
+          <a
+            href="https://instagram.com"
+            aria-label="Instagram"
+            className="text-base font-semibold text-white/60 transition hover:text-white"
+          >
+            ◎
+          </a>
+          <span className="ml-1 hidden h-px w-10 bg-white/30 sm:block" />
+          <span className="hidden text-[9px] font-semibold tracking-[0.18em] text-white/45 sm:block">
+            FOLLOW THE JOURNEY
+          </span>
+        </div>
+
+        {/* Bottom-Right Upcoming Destination Cards + Controls */}
+        <section
+          className="absolute bottom-20 left-6 right-6 z-10 md:bottom-8 md:left-auto md:right-12 md:w-[min(58%,700px)] lg:right-16"
+          aria-label="Upcoming destinations"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="mb-4 flex items-center justify-between md:hidden">
+            <span className="text-[10px] font-semibold tracking-[0.2em] text-white/60">
+              UP NEXT
+            </span>
+            <span className="text-xs text-white/70">
+              {pad2(index + 1)} <span className="text-white/35">—</span> {pad2(slides.length)}
+            </span>
+          </div>
+
+          <div className="flex gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:justify-start md:gap-4">
+            <AnimatePresence initial={false} mode="popLayout">
+              {upcomingSlides.map(({ slide, slideIndex }, order) => {
+                const isSaved = savedIds.includes(slide.id);
+                return (
+                  <motion.button
+                    key={slide.id}
+                    type="button"
+                    layout="position"
+                    initial={{ opacity: 0, x: 40, scale: 0.94 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: -40, scale: 0.94 }}
+                    whileHover={{ y: -4 }}
+                    transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+                    onClick={() => setIndex(slideIndex)}
+                    aria-label={`Preview ${slide.title}, ${slide.tag}, rated ${slide.rating}`}
+                    className={`group relative h-[190px] w-[142px] shrink-0 overflow-hidden rounded-2xl border border-white/15 text-left shadow-2xl transition-colors duration-300 hover:border-white/40 sm:h-[220px] sm:w-[160px] md:h-[270px] md:w-[180px] lg:h-[300px] lg:w-[200px] ${
+                      order >= 2 ? "hidden sm:block" : ""
+                    }`}
+                  >
                   <img
                     src={slide.cardImage}
                     alt={`${slide.title}, ${slide.tag}`}
                     className="absolute inset-0 size-full object-cover transition duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <span className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/15 to-slate-950/15" />
+                  <span className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/10 to-slate-950/15" />
 
                   <span
                     role="button"
                     tabIndex={0}
-                    aria-label={isSaved ? `Remove ${slide.title} bookmark` : `Bookmark ${slide.title}`}
+                    aria-label={
+                      isSaved ? `Remove ${slide.title} bookmark` : `Bookmark ${slide.title}`
+                    }
                     onClick={(e) => toggleSave(e, slide.id)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
@@ -383,7 +439,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                     <span className="mb-1 block text-[9px] font-bold tracking-[0.17em] text-white/70">
                       {slide.tag}
                     </span>
-                    <span className="block truncate text-sm font-extrabold leading-tight text-white">
+                    <span className="block text-sm font-extrabold leading-tight text-white">
                       {slide.title}
                     </span>
                     <span className="mt-2 flex items-center gap-1 text-[10px] font-medium text-white/90">
@@ -398,10 +454,11 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                 </motion.button>
               );
             })}
+            </AnimatePresence>
           </div>
 
           {/* Navigation Controls & Bottom Indicator */}
-          <div className="flex w-full items-center justify-between">
+          <div className="mt-1 hidden items-center justify-between md:flex">
             <div className="flex items-center gap-2">
               <button
                 type="button"
