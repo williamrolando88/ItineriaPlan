@@ -169,7 +169,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
       />
 
       {/* Top Navbar */}
-      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:grid md:grid-cols-[1fr_auto_1fr] md:px-8 lg:px-10">
+      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-10">
         <a
           href="#top"
           className="flex items-center gap-2.5 justify-self-start text-sm font-black tracking-[0.2em]"
@@ -190,12 +190,12 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           ))}
         </nav>
 
-        <div className="hidden md:block" aria-hidden="true" />
+        <div className="hidden lg:block" aria-hidden="true" />
       </header>
 
       {/* Left Vertical Step Indicator (centered relative to full <main> section) */}
       <aside
-        className="absolute left-4 top-1/2 z-20 hidden h-[60%] -translate-y-1/2 flex-col items-center md:left-5 md:flex lg:left-6"
+        className="absolute left-4 top-1/2 z-20 hidden h-[60%] -translate-y-1/2 flex-col items-center lg:left-6 lg:flex"
         aria-label="Choose destination"
       >
         <div className="relative flex flex-1 flex-col items-center justify-between">
@@ -229,7 +229,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         {/* Main Hero Text (vertically centered on left) */}
         <section
           id="top"
-          className="relative z-10 w-full md:pl-10 lg:flex-1 lg:pl-14"
+          className="relative z-10 w-full lg:flex-1 lg:pl-14"
           aria-live="polite"
         >
           <AnimatePresence initial={false} mode="wait">
