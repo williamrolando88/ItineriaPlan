@@ -5,7 +5,9 @@ import {
   ArrowRight,
   ArrowDown,
   Bookmark,
+  Menu,
   Star,
+  X,
 } from "lucide-react";
 import { BrandIcon } from "./BrandIcon";
 
@@ -103,6 +105,8 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [savedIds, setSavedIds] = useState<number[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedNav, setSelectedNav] = useState<string | null>(null);
 
   const nextSlide = useCallback(() => {
     setIndex((prev) => (prev + 1) % slides.length);
@@ -190,8 +194,60 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           ))}
         </nav>
 
+        <button
+          type="button"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMenuOpen((v) => !v)}
+          className="grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/20 md:hidden"
+        >
+          {menuOpen ? (
+            <X className="size-5" aria-hidden="true" />
+          ) : (
+            <Menu className="size-5" aria-hidden="true" />
+          )}
+        </button>
+
         <div className="hidden lg:block" aria-hidden="true" />
       </header>
+
+      {/* Mobile Menu Drawer */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            className="absolute right-6 top-20 z-30 flex w-max flex-col items-end gap-1 rounded-2xl border border-white/15 bg-slate-950/90 p-3 text-right backdrop-blur-xl md:hidden"
+            aria-label="Mobile navigation"
+          >
+            {NAV_LINKS.map((link) => {
+              const isSelected = selectedNav === link.href;
+              return (
+                <motion.a
+                  key={link.href}
+                  href={link.href}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => {
+                    setSelectedNav(link.href);
+                    setTimeout(() => {
+                      setMenuOpen(false);
+                      setSelectedNav(null);
+                    }, 200);
+                  }}
+                  className={`block w-full rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                    isSelected
+                      ? "bg-white/20 text-white"
+                      : "text-white/80 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </motion.a>
+              );
+            })}
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
       {/* Left Vertical Step Indicator (centered relative to full <main> section) */}
       <aside
@@ -311,16 +367,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div className="mb-4 flex items-center justify-between md:hidden">
-            <span className="text-[10px] font-semibold tracking-[0.2em] text-white/60">
-              UP NEXT
-            </span>
-            <span className="text-xs text-white/70">
-              {pad2(index + 1)} <span className="text-white/35">—</span> {pad2(slides.length)}
-            </span>
-          </div>
-
-          <div className="flex gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:justify-start md:gap-4">
+          <div className="hidden gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex md:justify-start md:gap-4">
             <AnimatePresence initial={false} mode="popLayout">
               {upcomingSlides.map(({ slide, slideIndex }, order) => {
                 const isSaved = savedIds.includes(slide.id);
@@ -395,7 +442,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           </div>
 
           {/* Navigation Controls & Bottom Indicator */}
-          <div className="mt-1 hidden items-center justify-between md:flex">
+          <div className="mt-1 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
                 type="button"
