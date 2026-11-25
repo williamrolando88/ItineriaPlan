@@ -6,10 +6,7 @@ import {
   ArrowDown,
   Bookmark,
   Flame,
-  Menu,
-  Search,
   Star,
-  X,
 } from "lucide-react";
 
 export interface SlideItem {
@@ -106,7 +103,6 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [savedIds, setSavedIds] = useState<number[]>([]);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   const nextSlide = useCallback(() => {
     setIndex((prev) => (prev + 1) % slides.length);
@@ -173,10 +169,10 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
       />
 
       {/* Top Navbar */}
-      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-8 lg:px-10">
+      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:grid md:grid-cols-[1fr_auto_1fr] md:px-8 lg:px-10">
         <a
           href="#top"
-          className="flex items-center gap-2.5 text-sm font-black tracking-[0.2em]"
+          className="flex items-center gap-2.5 justify-self-start text-sm font-black tracking-[0.2em]"
           aria-label="ItineriaPlan home"
         >
           <span className="grid size-9 place-items-center rounded-full border border-white/25 bg-white/10">
@@ -186,7 +182,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         </a>
 
         <nav
-          className="hidden items-center gap-10 text-sm font-medium text-white/70 md:flex"
+          className="hidden items-center gap-10 justify-self-center text-sm font-medium text-white/70 md:flex"
           aria-label="Main navigation"
         >
           {NAV_LINKS.map((link) => (
@@ -196,52 +192,8 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            aria-label="Search destinations"
-            className="grid size-10 place-items-center rounded-full bg-white text-slate-950 transition hover:bg-blue-100"
-          >
-            <Search className="size-4" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen((v) => !v)}
-            className="grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/20"
-          >
-            {menuOpen ? (
-              <X className="size-5" aria-hidden="true" />
-            ) : (
-              <Menu className="size-5" aria-hidden="true" />
-            )}
-          </button>
-        </div>
+        <div className="hidden md:block" aria-hidden="true" />
       </header>
-
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.nav
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            className="absolute inset-x-6 top-20 z-30 flex flex-col gap-3 rounded-2xl border border-white/15 bg-slate-950/90 p-5 backdrop-blur-xl md:hidden"
-            aria-label="Mobile navigation"
-          >
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                className="text-sm font-medium text-white/80 transition hover:text-white"
-              >
-                {link.label}
-              </a>
-            ))}
-          </motion.nav>
-        )}
-      </AnimatePresence>
 
       {/* Left Vertical Step Indicator (centered relative to full <main> section) */}
       <aside
