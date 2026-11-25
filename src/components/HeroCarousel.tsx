@@ -19,29 +19,54 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   const [menuOpen, setMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion();
 
+  const slideCount = slides.length;
+  const safeIndex = slideCount > 0 ? index % slideCount : 0;
+
   const nextSlide = useCallback(() => {
-    setIndex((prev) => (prev + 1) % slides.length);
-  }, [slides.length]);
+    if (slideCount <= 1) return;
+    setIndex((prev) => (prev + 1) % slideCount);
+  }, [slideCount]);
 
   const prevSlide = useCallback(() => {
-    setIndex((prev) => (prev - 1 + slides.length) % slides.length);
-  }, [slides.length]);
+    if (slideCount <= 1) return;
+    setIndex((prev) => (prev - 1 + slideCount) % slideCount);
+  }, [slideCount]);
 
   // Auto-advance every 5s unless user hovers the preview cards or prefers reduced motion
   useEffect(() => {
-    if (isPaused || reduceMotion) return;
+    if (isPaused || reduceMotion || slideCount <= 1) return;
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, [isPaused, reduceMotion, nextSlide]);
+  }, [isPaused, reduceMotion, slideCount, nextSlide]);
 
   useEffect(() => {
+    if (slideCount <= 1) return;
     const onKeyDown = (e: KeyboardEvent) => {
+      if (menuOpen || e.metaKey || e.ctrlKey || e.altKey) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
       if (e.key === "ArrowRight") nextSlide();
       if (e.key === "ArrowLeft") prevSlide();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [nextSlide, prevSlide]);
+  }, [menuOpen, slideCount, nextSlide, prevSlide]);
+
+  // Preload next slide background image to avoid flash on transition
+  useEffect(() => {
+    if (slideCount <= 1) return;
+    const nextBg = slides[(safeIndex + 1) % slideCount].bgImage;
+    const img = new Image();
+    img.src = nextBg;
+  }, [slides, safeIndex, slideCount]);
 
   const toggleSave = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
@@ -50,9 +75,17 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
     );
   };
 
-  const current = slides[index];
-  const upcomingSlides = Array.from({ length: slides.length - 1 }, (_, offset) => {
-    const slideIndex = (index + 1 + offset) % slides.length;
+  if (slideCount === 0) {
+    return (
+      <main className="relative isolate flex min-h-[max(100svh,560px)] flex-col overflow-hidden bg-slate-950 text-white select-none">
+        <Navbar links={NAV_LINKS} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
+      </main>
+    );
+  }
+
+  const current = slides[safeIndex];
+  const upcomingSlides = Array.from({ length: slideCount - 1 }, (_, offset) => {
+    const slideIndex = (safeIndex + 1 + offset) % slideCount;
     return { slide: slides[slideIndex], slideIndex };
   });
 
@@ -61,14 +94,17 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
       {/* Fullscreen cross-fade background */}
       <div className="absolute inset-0 -z-20" aria-hidden="true">
         <AnimatePresence initial={false} mode="popLayout">
-          <motion.div
+          <motion.img
             key={current.id}
+            src={current.bgImage}
+            alt=""
+            fetchPriority="high"
+            decoding="async"
             initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 1.06 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: reduceMotion ? 0.15 : 0.9, ease: "easeInOut" }}
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${current.bgImage})` }}
+            className="absolute inset-0 size-full object-cover"
           />
         </AnimatePresence>
       </div>
@@ -93,7 +129,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         <div className="relative flex flex-1 flex-col items-center justify-between">
           <span className="absolute top-2 bottom-2 w-px bg-white/25" aria-hidden="true" />
           {slides.map((slide, i) => {
-            const isActive = i === index;
+            const isActive = i === safeIndex;
             return (
               <button
                 key={slide.id}
@@ -247,9 +283,9 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
             </div>
 
             <div className="flex items-center gap-3 text-[10px] font-semibold tracking-[0.16em] text-white/65">
-              <span>{pad2(index + 1)}</span>
+              <span>{pad2(safeIndex + 1)}</span>
               <span className="h-px w-16 bg-white/45" />
-              <span>{pad2(slides.length)}</span>
+              <span>{pad2(slideCount)}</span>
               <ArrowDown className="ml-1 size-3" aria-hidden="true" />
             </div>
           </div>
