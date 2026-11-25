@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowDown } from "lucide-react";
 import { DEFAULT_SLIDES, NAV_LINKS, type SlideItem } from "../data/hero";
 import { Navbar } from "./Navbar";
@@ -17,6 +17,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   const [isPaused, setIsPaused] = useState(false);
   const [savedIds, setSavedIds] = useState<number[]>([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const nextSlide = useCallback(() => {
     setIndex((prev) => (prev + 1) % slides.length);
@@ -26,12 +27,12 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
     setIndex((prev) => (prev - 1 + slides.length) % slides.length);
   }, [slides.length]);
 
-  // Auto-advance every 5s unless user hovers the preview cards
+  // Auto-advance every 5s unless user hovers the preview cards or prefers reduced motion
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || reduceMotion) return;
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, [isPaused, nextSlide]);
+  }, [isPaused, reduceMotion, nextSlide]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -62,10 +63,10 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         <AnimatePresence initial={false} mode="popLayout">
           <motion.div
             key={current.id}
-            initial={{ opacity: 0, scale: 1.06 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 1.06 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.9, ease: "easeInOut" }}
+            transition={{ duration: reduceMotion ? 0.15 : 0.9, ease: "easeInOut" }}
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${current.bgImage})` }}
           />
@@ -126,10 +127,10 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={current.id}
-              initial={{ opacity: 0, y: 28 }}
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -24 }}
-              transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -24 }}
+              transition={{ duration: reduceMotion ? 0.15 : 0.45, ease: EASE_OUT_EXPO }}
               className="max-w-[540px] lg:max-w-[480px] xl:max-w-[500px] 3xl:max-w-[540px]"
             >
               <div className="mb-5 flex items-center gap-3">
@@ -170,24 +171,30 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         >
           <a
             href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Facebook"
             className="text-sm font-bold text-white/60 transition hover:text-white"
           >
-            f
+            <span aria-hidden="true">f</span>
           </a>
           <a
             href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Twitter"
             className="text-xs font-bold text-white/60 transition hover:text-white"
           >
-            𝕏
+            <span aria-hidden="true">𝕏</span>
           </a>
           <a
             href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
             aria-label="Instagram"
             className="text-base font-semibold text-white/60 transition hover:text-white"
           >
-            ◎
+            <span aria-hidden="true">◎</span>
           </a>
           <span className="ml-1 hidden h-px w-10 bg-white/30 sm:block" />
           <span className="hidden text-[9px] font-semibold tracking-[0.18em] text-white/45 sm:block">
