@@ -146,7 +146,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   });
 
   return (
-    <main className="relative isolate min-h-svh overflow-hidden bg-slate-950 text-white select-none">
+    <main className="relative isolate min-h-[max(100svh,560px)] overflow-hidden bg-slate-950 text-white select-none">
       {/* Fullscreen cross-fade background */}
       <div className="absolute inset-0 -z-20" aria-hidden="true">
         <AnimatePresence initial={false} mode="popLayout">
@@ -281,7 +281,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
       </aside>
 
       {/* Hero Stage */}
-      <div className="relative flex min-h-[calc(100svh-88px)] w-full flex-col justify-between gap-8 px-6 pb-16 pt-4 md:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:px-10 lg:pb-20">
+      <div className="relative flex min-h-[calc(max(100svh,560px)-88px)] w-full flex-col justify-between gap-8 px-6 pb-16 pt-4 md:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:px-10 lg:pb-20">
         {/* Main Hero Text (vertically centered on left) */}
         <section
           id="top"
