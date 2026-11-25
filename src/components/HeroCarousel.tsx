@@ -153,7 +153,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
       </aside>
 
       {/* Hero Stage */}
-      <div className="relative grid flex-1 grid-cols-1 gap-8 px-6 pb-6 pt-4 md:px-8 md:pb-8 lg:grid-cols-[1fr_auto] lg:grid-rows-[1fr_auto] lg:gap-x-8 lg:gap-y-6 lg:px-10 lg:pb-10">
+      <div className="relative grid flex-1 grid-cols-1 grid-rows-[1fr_auto_auto] gap-8 px-6 pb-6 pt-4 md:px-8 md:pb-8 lg:grid-cols-[1fr_auto] lg:grid-rows-[1fr_auto] lg:gap-x-8 lg:gap-y-6 lg:px-10 lg:pb-10">
         {/* Main Hero Text (vertically centered on left) */}
         <section
           id="top"
@@ -245,7 +245,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div className="flex gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:justify-start md:gap-4">
+          <div className="hidden gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex md:justify-start md:gap-4">
             <AnimatePresence initial={false} mode="popLayout">
               {upcomingSlides.map(({ slide, slideIndex }, order) => (
                 <DestinationCard
