@@ -18,7 +18,6 @@ export interface SlideItem {
   title: string;
   description: string;
   ctaText: string;
-  price: string;
   rating: string;
   bgImage: string;
   cardImage: string;
@@ -32,7 +31,6 @@ const DEFAULT_SLIDES: SlideItem[] = [
     description:
       "Emerald rice terraces, sacred cliffside temples, and tranquil volcanic shores curated for travelers seeking culture, surf, and quiet luxury.",
     ctaText: "EXPLORE TOUR",
-    price: "$1,200",
     rating: "4.9",
     bgImage:
       "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1920&q=80",
@@ -46,7 +44,6 @@ const DEFAULT_SLIDES: SlideItem[] = [
     description:
       "Ancient Inca stonework high above the Sacred Valley, surrounded by cloud-forest ridges and timeless Andean mountain trails.",
     ctaText: "START JOURNEY",
-    price: "$1,450",
     rating: "4.8",
     bgImage:
       "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1920&q=80",
@@ -60,7 +57,6 @@ const DEFAULT_SLIDES: SlideItem[] = [
     description:
       "Whitewashed villages perched over the Aegean caldera, golden-hour sea breezes, and sun-drenched coastal retreats.",
     ctaText: "BOOK TRIP",
-    price: "$1,800",
     rating: "4.9",
     bgImage:
       "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1920&q=80",
@@ -74,7 +70,6 @@ const DEFAULT_SLIDES: SlideItem[] = [
     description:
       "Lantern-lit wooden alleys, centuries-old zen gardens, and seasonal cherry blossoms woven into Japan's cultural heartland.",
     ctaText: "DISCOVER MORE",
-    price: "$2,100",
     rating: "4.7",
     bgImage:
       "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1920&q=80",
@@ -88,7 +83,6 @@ const DEFAULT_SLIDES: SlideItem[] = [
     description:
       "Glacial lagoons, black-sand coastlines, and dancing northern lights under crisp subarctic skies.",
     ctaText: "VIEW EXPEDITION",
-    price: "$2,400",
     rating: "5.0",
     bgImage:
       "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=1920&q=80",
@@ -179,7 +173,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
       />
 
       {/* Top Navbar */}
-      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-12 lg:px-16">
+      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-8 lg:px-10">
         <a
           href="#top"
           className="flex items-center gap-2.5 text-sm font-black tracking-[0.2em]"
@@ -249,46 +243,44 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
         )}
       </AnimatePresence>
 
+      {/* Left Vertical Step Indicator (centered relative to full <main> section) */}
+      <aside
+        className="absolute left-4 top-1/2 z-20 hidden h-[60%] -translate-y-1/2 flex-col items-center md:left-5 md:flex lg:left-6"
+        aria-label="Choose destination"
+      >
+        <div className="relative flex flex-1 flex-col items-center justify-between">
+          <span className="absolute top-2 bottom-2 w-px bg-white/25" aria-hidden="true" />
+          {slides.map((slide, i) => {
+            const isActive = i === index;
+            return (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => setIndex(i)}
+                aria-label={`Go to ${slide.title}`}
+                aria-current={isActive ? "step" : undefined}
+                className="group relative z-10 grid size-4 place-items-center"
+              >
+                <span
+                  className={`size-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? "scale-125 bg-blue-500 ring-4 ring-blue-500/20"
+                      : "bg-white/55 group-hover:scale-125 group-hover:bg-white"
+                  }`}
+                />
+              </button>
+            );
+          })}
+        </div>
+      </aside>
+
       {/* Hero Stage */}
-      <div className="relative mx-auto flex min-h-[calc(100svh-88px)] max-w-[1600px] items-center px-6 pb-24 pt-8 md:px-12 lg:px-16">
-        {/* Left Vertical Step Indicator */}
-        <aside
-          className="absolute left-6 top-1/2 hidden -translate-y-1/2 flex-col items-center md:flex lg:left-16"
-          aria-label="Choose destination"
-        >
-          <div className="relative flex flex-col items-center gap-5">
-            <span className="absolute top-2 bottom-2 w-px bg-white/25" aria-hidden="true" />
-            {slides.map((slide, i) => {
-              const isActive = i === index;
-              return (
-                <button
-                  key={slide.id}
-                  type="button"
-                  onClick={() => setIndex(i)}
-                  aria-label={`Go to ${slide.title}`}
-                  aria-current={isActive ? "step" : undefined}
-                  className="group relative z-10 grid size-4 place-items-center"
-                >
-                  <span
-                    className={`size-2 rounded-full transition-all duration-300 ${
-                      isActive
-                        ? "scale-125 bg-blue-500 ring-4 ring-blue-500/20"
-                        : "bg-white/55 group-hover:scale-125 group-hover:bg-white"
-                    }`}
-                  />
-                </button>
-              );
-            })}
-          </div>
-          <span className="mt-5 text-[10px] font-bold tracking-[0.16em] text-white/70">
-            {pad2(index + 1)} <span className="text-white/35">/</span> {pad2(slides.length)}
-          </span>
-        </aside>
+      <div className="relative flex min-h-[calc(100svh-88px)] w-full items-center px-6 pb-28 pt-2 md:px-8 lg:px-10">
 
         {/* Main Hero Text (vertically centered on left) */}
         <section
           id="top"
-          className="relative z-10 w-full pb-6 md:pl-16 lg:pl-24"
+          className="relative z-10 w-full pb-6 md:pl-10 lg:pl-14"
           aria-live="polite"
         >
           <AnimatePresence initial={false} mode="wait">
@@ -298,7 +290,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -24 }}
               transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-              className="max-w-[620px]"
+              className="max-w-[540px]"
             >
               <div className="mb-5 flex items-center gap-3">
                 <span className="rounded-md bg-blue-600 px-2.5 py-1 text-[10px] font-bold tracking-[0.14em]">
@@ -318,7 +310,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                 {current.description}
               </p>
 
-              <div className="mt-6 flex flex-wrap items-center gap-5">
+              <div className="mt-7">
                 <button
                   type="button"
                   className="inline-flex items-center gap-3 rounded-xl bg-blue-600 px-7 py-3.5 text-xs font-bold tracking-wide text-white shadow-lg shadow-blue-600/30 transition hover:bg-blue-500"
@@ -326,10 +318,6 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                   {current.ctaText}
                   <ArrowRight className="size-4" aria-hidden="true" />
                 </button>
-                <div className="flex items-center gap-2 text-sm text-white/80">
-                  <span className="font-bold text-white">{current.price}</span>
-                  <span className="text-white/45">/ person</span>
-                </div>
               </div>
             </motion.div>
           </AnimatePresence>
@@ -337,7 +325,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
 
         {/* Bottom-Left Social Links */}
         <div
-          className="absolute bottom-6 left-6 z-10 flex items-center gap-4 md:bottom-9 md:left-12 lg:left-16"
+          className="absolute bottom-6 left-6 z-10 flex items-center gap-4 md:bottom-9 md:left-8 lg:left-10"
           aria-label="Social media"
         >
           <a
