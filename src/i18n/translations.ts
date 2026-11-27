@@ -100,6 +100,12 @@ export interface Copy {
     hours: string;
     rights: string;
   };
+  contact: {
+    eyebrow: string;
+    heading: string;
+    subtitle: string;
+    channels: Array<{ label: string; value: string; note: string }>;
+  };
 }
 
 export const COPY: Record<Locale, Copy> = {
@@ -229,6 +235,17 @@ export const COPY: Record<Locale, Copy> = {
       hours: "Mon–Sat · Live quote support",
       rights: "All rights reserved.",
     },
+    contact: {
+      eyebrow: "DIRECT CONCIERGE",
+      heading: "Talk with a travel designer",
+      subtitle:
+        "Prefer WhatsApp, email, or a quick discovery call? Reach us directly to start your custom route.",
+      channels: [
+        { label: "Email", value: "hello@itineriaplan.com", note: "Replies within 24h" },
+        { label: "WhatsApp", value: "+1 (305) 555-0194", note: "Mon–Sat · 9:00–19:00" },
+        { label: "Video call", value: "20-min consultation", note: "By appointment" },
+      ],
+    },
   },
   es: {
     meta: {
@@ -356,15 +373,35 @@ export const COPY: Record<Locale, Copy> = {
       hours: "Lun–Sáb · Cotizaciones en vivo",
       rights: "Todos los derechos reservados.",
     },
+    contact: {
+      eyebrow: "ASESORÍA DIRECTA",
+      heading: "Habla con un diseñador de viajes",
+      subtitle:
+        "¿Prefieres WhatsApp, correo o una llamada rápida? Escríbenos directo para empezar tu ruta a medida.",
+      channels: [
+        { label: "Correo", value: "hello@itineriaplan.com", note: "Respuesta en menos de 24h" },
+        { label: "WhatsApp", value: "+1 (305) 555-0194", note: "Lun–Sáb · 9:00–19:00" },
+        { label: "Videollamada", value: "Sesión de 20 min", note: "Con cita previa" },
+      ],
+    },
   },
 };
 
-export function getNavLinks(locale: Locale) {
+export function getHomeBase(locale: Locale) {
+  return locale === "en" ? "/" : "/es/";
+}
+
+export function getItineraryPath(locale: Locale) {
+  return locale === "en" ? "/itinerary" : "/es/itinerary";
+}
+
+export function getNavLinks(locale: Locale, prefixAnchors = false) {
   const { links } = COPY[locale].nav;
+  const base = prefixAnchors ? getHomeBase(locale) : "";
   return [
-    { label: links.destinations, href: "#destinations" },
-    { label: links.howItWorks, href: "#how-it-works" },
-    { label: links.stories, href: "#stories" },
-    { label: links.contact, href: "#contact" },
+    { label: links.howItWorks, href: `${base}#how-it-works` },
+    { label: links.destinations, href: `${base}#destinations` },
+    { label: links.stories, href: `${base}#stories` },
+    { label: links.contact, href: `${base}#contact` },
   ];
 }

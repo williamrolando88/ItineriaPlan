@@ -3,17 +3,23 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { BrandIcon } from "./BrandIcon";
 import { NAV_LINKS, type NavLink } from "../../data/hero";
-import { COPY, type Locale } from "../../i18n/translations";
+import { COPY, getHomeBase, getItineraryPath, type Locale } from "../../i18n/translations";
 
 interface NavbarProps {
   links?: NavLink[];
   locale?: Locale;
+  isSubpage?: boolean;
 }
 
-export function Navbar({ links = NAV_LINKS, locale = "en" }: NavbarProps) {
+export function Navbar({ links = NAV_LINKS, locale = "en", isSubpage = false }: NavbarProps) {
   const t = COPY[locale].nav;
   const otherLocale: Locale = locale === "en" ? "es" : "en";
-  const otherHref = otherLocale === "en" ? "/" : "/es/";
+  const otherHref = isSubpage
+    ? getItineraryPath(otherLocale)
+    : getHomeBase(otherLocale);
+  const homeHref = isSubpage ? getHomeBase(locale) : "#top";
+  const itineraryHref = getItineraryPath(locale);
+  const quoteHref = isSubpage ? `${getHomeBase(locale)}#quote` : "#quote";
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedNav, setSelectedNav] = useState<string | null>(null);
   const reduceMotion = useReducedMotion();
@@ -60,7 +66,7 @@ export function Navbar({ links = NAV_LINKS, locale = "en" }: NavbarProps) {
     <>
       <header className="fixed inset-x-0 top-0 z-30 flex items-center justify-between bg-gradient-to-b from-surface/80 to-transparent px-6 py-6 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-10">
         <a
-          href="#top"
+          href={homeHref}
           className="flex items-center gap-2.5 justify-self-start text-sm font-black tracking-[0.2em]"
           aria-label={t.homeAria}
         >
@@ -81,13 +87,13 @@ export function Navbar({ links = NAV_LINKS, locale = "en" }: NavbarProps) {
 
         <div className="flex items-center gap-3 justify-self-end">
           <a
-            href="#itinerary-access"
+            href={itineraryHref}
             className="hidden text-xs font-semibold text-ink/75 transition hover:text-ink lg:inline-block"
           >
             {t.myItinerary}
           </a>
           <a
-            href="#quote"
+            href={quoteHref}
             className="hidden rounded-full bg-brand px-4 py-1.5 text-xs font-bold text-ink transition hover:bg-brand-hover md:inline-block"
           >
             {t.planTrip}
@@ -162,6 +168,20 @@ export function Navbar({ links = NAV_LINKS, locale = "en" }: NavbarProps) {
                 </motion.a>
               );
             })}
+            <a
+              href={itineraryHref}
+              onClick={() => setMenuOpen(false)}
+              className="block w-full rounded-lg px-4 py-2 text-sm font-medium text-ink/80 transition hover:bg-ink/10 hover:text-ink"
+            >
+              {t.myItinerary}
+            </a>
+            <a
+              href={quoteHref}
+              onClick={() => setMenuOpen(false)}
+              className="mt-1 block w-full rounded-lg bg-brand px-4 py-2 text-center text-sm font-bold text-ink transition hover:bg-brand-hover"
+            >
+              {t.planTrip}
+            </a>
           </motion.nav>
         )}
       </AnimatePresence>

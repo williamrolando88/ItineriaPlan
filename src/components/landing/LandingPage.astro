@@ -6,8 +6,9 @@ import { Navbar } from './Navbar';
 import HeroCarousel from './HeroCarousel';
 import HowItWorks from './HowItWorks.astro';
 import DestinationsGrid from './DestinationsGrid.astro';
-import QuoteAndAccess from './QuoteAndAccess.astro';
+import QuoteSection from './QuoteSection.astro';
 import ReviewsCarousel from './ReviewsCarousel';
+import ContactSection from './ContactSection.astro';
 import Footer from './Footer.astro';
 
 interface Props {
@@ -36,8 +37,9 @@ const slides = getSlides(locale);
 			<HeroCarousel slides={slides} locale={locale} client:load />
 			<HowItWorks locale={locale} />
 			<DestinationsGrid locale={locale} />
-			<QuoteAndAccess locale={locale} />
+			<QuoteSection locale={locale} />
 			<ReviewsCarousel locale={locale} client:visible />
+			<ContactSection locale={locale} />
 		</main>
 		<Footer locale={locale} />
 	</body>
