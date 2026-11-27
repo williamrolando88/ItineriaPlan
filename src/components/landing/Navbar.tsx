@@ -3,12 +3,17 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { BrandIcon } from "./BrandIcon";
 import { NAV_LINKS, type NavLink } from "../../data/hero";
+import { COPY, type Locale } from "../../i18n/translations";
 
 interface NavbarProps {
   links?: NavLink[];
+  locale?: Locale;
 }
 
-export function Navbar({ links = NAV_LINKS }: NavbarProps) {
+export function Navbar({ links = NAV_LINKS, locale = "en" }: NavbarProps) {
+  const t = COPY[locale].nav;
+  const otherLocale: Locale = locale === "en" ? "es" : "en";
+  const otherHref = otherLocale === "en" ? "/" : "/es/";
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedNav, setSelectedNav] = useState<string | null>(null);
   const reduceMotion = useReducedMotion();
@@ -57,7 +62,7 @@ export function Navbar({ links = NAV_LINKS }: NavbarProps) {
         <a
           href="#top"
           className="flex items-center gap-2.5 justify-self-start text-sm font-black tracking-[0.2em]"
-          aria-label="ItineriaPlan home"
+          aria-label={t.homeAria}
         >
           <BrandIcon />
           ITINERIA
@@ -65,7 +70,7 @@ export function Navbar({ links = NAV_LINKS }: NavbarProps) {
 
         <nav
           className="hidden items-center gap-10 justify-self-center text-sm font-medium text-ink/70 md:flex"
-          aria-label="Main navigation"
+          aria-label={t.mainAria}
         >
           {links.map((link) => (
             <a key={link.href} className="transition hover:text-ink" href={link.href}>
@@ -74,23 +79,31 @@ export function Navbar({ links = NAV_LINKS }: NavbarProps) {
           ))}
         </nav>
 
-        <button
-          ref={toggleBtnRef}
-          type="button"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-nav-drawer"
-          onClick={() => setMenuOpen((prev) => !prev)}
-          className="grid size-10 place-items-center rounded-full border border-ink/25 bg-ink/10 transition hover:bg-ink/20 md:hidden"
-        >
-          {menuOpen ? (
-            <X className="size-5" aria-hidden="true" />
-          ) : (
-            <Menu className="size-5" aria-hidden="true" />
-          )}
-        </button>
+        <div className="flex items-center gap-3 justify-self-end">
+          <a
+            href={otherHref}
+            aria-label={`Switch language to ${otherLocale.toUpperCase()}`}
+            className="rounded-full border border-ink/20 bg-ink/10 px-3 py-1.5 text-[11px] font-bold tracking-wider text-ink/85 transition hover:bg-ink/20 hover:text-ink"
+          >
+            {otherLocale.toUpperCase()}
+          </a>
 
-        <div className="hidden lg:block" aria-hidden="true" />
+          <button
+            ref={toggleBtnRef}
+            type="button"
+            aria-label={menuOpen ? t.closeMenu : t.openMenu}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav-drawer"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            className="grid size-10 place-items-center rounded-full border border-ink/25 bg-ink/10 transition hover:bg-ink/20 md:hidden"
+          >
+            {menuOpen ? (
+              <X className="size-5" aria-hidden="true" />
+            ) : (
+              <Menu className="size-5" aria-hidden="true" />
+            )}
+          </button>
+        </div>
       </header>
 
       <AnimatePresence>
@@ -103,7 +116,7 @@ export function Navbar({ links = NAV_LINKS }: NavbarProps) {
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
             transition={{ duration: reduceMotion ? 0.1 : 0.2 }}
             className="fixed right-6 top-20 z-30 flex w-max flex-col items-end gap-1 rounded-2xl border border-ink/15 bg-surface/90 p-3 text-right backdrop-blur-xl md:hidden"
-            aria-label="Mobile navigation"
+            aria-label={t.mobileAria}
           >
             {links.map((link) => {
               const isSelected = selectedNav === link.href;

@@ -1,4 +1,7 @@
-export function ReviewsCarousel() {
+import { COPY, type Locale } from "../../i18n/translations";
+
+export function ReviewsCarousel({ locale = "en" }: { locale?: Locale }) {
+  const t = COPY[locale].reviews;
   return (
     <section
       id="stories"
@@ -7,16 +10,16 @@ export function ReviewsCarousel() {
     >
       <div className="mx-auto max-w-6xl">
         <span className="text-[10px] font-bold tracking-[0.2em] text-brand-accent">
-          TRAVELER STORIES
+          {t.eyebrow}
         </span>
         <h2
           id="reviews-heading"
           className="mt-3 text-3xl font-black tracking-tight sm:text-4xl"
         >
-          Reviews Carousel
+          {t.heading}
         </h2>
         <p className="mt-3 max-w-xl text-sm text-ink/60">
-          Placeholder for upcoming traveler reviews and testimonials carousel.
+          {t.subtitle}
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -25,7 +28,7 @@ export function ReviewsCarousel() {
               key={item}
               className="rounded-2xl border border-dashed border-ink/15 bg-ink/[0.03] p-6 text-sm text-ink/40"
             >
-              Review card {item} placeholder
+              {t.cardPlaceholder} {item}
             </div>
           ))}
         </div>

@@ -1,31 +1,38 @@
 ---
 import '../../styles/global.css';
-import { NAV_LINKS } from '../../data/hero';
+import { COPY, getNavLinks, type Locale } from '../../i18n/translations';
+import { getSlides } from '../../data/hero';
 import { Navbar } from './Navbar';
 import HeroCarousel from './HeroCarousel';
 import ReviewsCarousel from './ReviewsCarousel';
 import Footer from './Footer.astro';
+
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const copy = COPY[locale];
+const navLinks = getNavLinks(locale);
+const slides = getSlides(locale);
 ---
 
-<html lang="en" class="scroll-smooth">
+<html lang={locale} class="scroll-smooth">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>ItineriaPlan — Find Your Next Journey</title>
-		<meta
-			name="description"
-			content="Discover extraordinary destinations with ItineriaPlan. Explore curated journeys from Bali to Iceland."
-		/>
+		<title>{copy.meta.title}</title>
+		<meta name="description" content={copy.meta.description} />
 	</head>
 	<body class="bg-surface text-ink antialiased">
-		<Navbar links={NAV_LINKS} client:load />
+		<Navbar links={navLinks} locale={locale} client:load />
 		<main>
-			<HeroCarousel client:load />
-			<ReviewsCarousel client:visible />
+			<HeroCarousel slides={slides} locale={locale} client:load />
+			<ReviewsCarousel locale={locale} client:visible />
 		</main>
-		<Footer />
+		<Footer locale={locale} />
 	</body>
 </html>

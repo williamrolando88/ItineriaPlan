@@ -2,6 +2,7 @@ import type React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Bookmark, Star } from "lucide-react";
 import type { SlideItem } from "../../data/hero";
+import { COPY, type Locale } from "../../i18n/translations";
 
 const EASE_OUT_EXPO = [0.22, 1, 0.36, 1] as const;
 
@@ -10,6 +11,7 @@ interface DestinationCardProps {
   order: number;
   isSaved: boolean;
   indexLabel: string;
+  locale?: Locale;
   onSelect: () => void;
   onToggleSave: (e: React.MouseEvent, id: number) => void;
 }
@@ -19,10 +21,12 @@ export function DestinationCard({
   order,
   isSaved,
   indexLabel,
+  locale = "en",
   onSelect,
   onToggleSave,
 }: DestinationCardProps) {
   const reduceMotion = useReducedMotion();
+  const t = COPY[locale].hero;
 
   return (
     <motion.div
@@ -39,7 +43,7 @@ export function DestinationCard({
       <button
         type="button"
         onClick={onSelect}
-        aria-label={`Preview ${slide.title}, ${slide.tag}, rated ${slide.rating}`}
+        aria-label={`${t.previewPrefix} ${slide.title}, ${slide.tag}, ${t.rated} ${slide.rating}`}
         className="relative block size-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-hover"
       >
         <img
@@ -67,7 +71,7 @@ export function DestinationCard({
 
       <button
         type="button"
-        aria-label={isSaved ? `Remove ${slide.title} bookmark` : `Bookmark ${slide.title}`}
+        aria-label={isSaved ? `${t.removeBookmark} ${slide.title}` : `${t.bookmark} ${slide.title}`}
         aria-pressed={isSaved}
         onClick={(e) => onToggleSave(e, slide.id)}
         className={`absolute right-3 top-3 z-10 grid size-8 place-items-center rounded-full transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-hover ${

@@ -1,7 +1,14 @@
 ---
 import { BrandIcon } from './BrandIcon';
-import { NAV_LINKS } from '../../data/hero';
+import { COPY, getNavLinks, type Locale } from '../../i18n/translations';
 
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const t = COPY[locale];
+const navLinks = getNavLinks(locale);
 const year = new Date().getFullYear();
 ---
 
@@ -14,19 +21,19 @@ const year = new Date().getFullYear();
 			<a
 				href="#top"
 				class="flex items-center gap-2.5 text-sm font-black tracking-[0.2em]"
-				aria-label="ItineriaPlan home"
+				aria-label={t.nav.homeAria}
 			>
 				<BrandIcon />
 				ITINERIA
 			</a>
 			<p class="max-w-xs text-xs leading-relaxed text-ink/55">
-				Curated journeys and bespoke travel itineraries across the world.
+				{t.footer.tagline}
 			</p>
 		</div>
 
-		<nav class="flex flex-wrap gap-6 text-sm text-ink/65" aria-label="Footer navigation">
+		<nav class="flex flex-wrap gap-6 text-sm text-ink/65" aria-label={t.footer.navAria}>
 			{
-				NAV_LINKS.map((link) => (
+				navLinks.map((link) => (
 					<a href={link.href} class="transition hover:text-ink">
 						{link.label}
 					</a>
@@ -36,7 +43,7 @@ const year = new Date().getFullYear();
 	</div>
 
 	<div class="mx-auto mt-10 flex max-w-6xl flex-col gap-2 border-t border-ink/10 pt-6 text-xs text-ink/45 sm:flex-row sm:items-center sm:justify-between">
-		<span>&copy; {year} ItineriaPlan. All rights reserved.</span>
-		<span>Placeholder footer — ready for contact details & legal links.</span>
+		<span>&copy; {year} ItineriaPlan. {t.footer.rights}</span>
+		<span>{t.footer.placeholderNote}</span>
 	</div>
 </footer>
