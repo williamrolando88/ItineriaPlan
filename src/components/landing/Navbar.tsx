@@ -95,9 +95,15 @@ export function Navbar({ links = NAV_LINKS, locale = "en" }: NavbarProps) {
           <a
             href={otherHref}
             aria-label={`Switch language to ${otherLocale.toUpperCase()}`}
-            className="rounded-full border border-ink/20 bg-ink/10 px-3 py-1.5 text-[11px] font-bold tracking-wider text-ink/85 transition hover:bg-ink/20 hover:text-ink"
+            className="inline-flex items-center gap-1 rounded-full border border-ink/20 bg-ink/10 px-3 py-1.5 text-[11px] font-bold tracking-wider transition hover:bg-ink/20"
           >
-            {otherLocale.toUpperCase()}
+            <span className={locale === "en" ? "text-ink underline underline-offset-4" : "text-ink/50"}>
+              EN
+            </span>
+            <span className="text-ink/35" aria-hidden="true">/</span>
+            <span className={locale === "es" ? "text-ink underline underline-offset-4" : "text-ink/50"}>
+              ES
+            </span>
           </a>
 
           <button
