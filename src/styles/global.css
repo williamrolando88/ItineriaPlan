@@ -2,4 +2,14 @@
 
 @theme {
   --breakpoint-3xl: 90rem;
+
+  /* Brand & Surface Tokens — swap here when final brand palette is ready */
+  --color-surface: #020617;
+  --color-surface-elevated: #0f172a;
+  --color-ink: #ffffff;
+  --color-ink-inverse: #0f172a;
+  --color-brand: #2563eb;
+  --color-brand-hover: #3b82f6;
+  --color-brand-accent: #60a5fa;
+  --color-star: #fcd34d;
 }

@@ -2,8 +2,7 @@ import type React from "react";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowDown } from "lucide-react";
-import { DEFAULT_SLIDES, NAV_LINKS, type SlideItem } from "../data/hero";
-import { Navbar } from "./Navbar";
+import { DEFAULT_SLIDES, type SlideItem } from "../../data/hero";
 import { DestinationCard } from "./DestinationCard";
 
 export type { SlideItem };
@@ -16,7 +15,6 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [savedIds, setSavedIds] = useState<number[]>([]);
-  const [menuOpen, setMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion();
 
   const slideCount = slides.length;
@@ -42,7 +40,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   useEffect(() => {
     if (slideCount <= 1) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (menuOpen || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
       const target = e.target as HTMLElement | null;
       if (
         target &&
@@ -58,7 +56,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [menuOpen, slideCount, nextSlide, prevSlide]);
+  }, [slideCount, nextSlide, prevSlide]);
 
   // Preload next slide background image to avoid flash on transition
   useEffect(() => {
@@ -77,9 +75,10 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
 
   if (slideCount === 0) {
     return (
-      <main className="relative isolate flex min-h-[max(100svh,560px)] flex-col overflow-hidden bg-slate-950 text-white select-none">
-        <Navbar links={NAV_LINKS} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
-      </main>
+      <section
+        aria-label="Featured destinations"
+        className="relative isolate flex min-h-[max(100svh,560px)] flex-col overflow-hidden bg-surface pt-20 text-ink select-none md:pt-24"
+      />
     );
   }
 
@@ -90,7 +89,10 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
   });
 
   return (
-    <main className="relative isolate flex min-h-[max(100svh,560px)] flex-col overflow-hidden bg-slate-950 text-white select-none">
+    <section
+      aria-label="Featured destinations"
+      className="relative isolate flex min-h-[max(100svh,560px)] flex-col overflow-hidden bg-surface pt-20 text-ink select-none md:pt-24"
+    >
       {/* Fullscreen cross-fade background */}
       <div className="absolute inset-0 -z-20" aria-hidden="true">
         <AnimatePresence initial={false} mode="popLayout">
@@ -111,23 +113,21 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
 
       {/* Vignette overlays */}
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/90 via-slate-900/60 to-slate-950/15"
+        className="absolute inset-0 -z-10 bg-gradient-to-r from-surface/90 via-surface-elevated/60 to-surface/15"
         aria-hidden="true"
       />
       <div
-        className="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/40"
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-surface/80 via-transparent to-surface/40"
         aria-hidden="true"
       />
 
-      <Navbar links={NAV_LINKS} menuOpen={menuOpen} onMenuOpenChange={setMenuOpen} />
-
-      {/* Left Vertical Step Indicator (centered relative to full <main> section) */}
+      {/* Left Vertical Step Indicator (centered relative to hero section) */}
       <aside
         className="absolute left-4 top-1/2 z-20 hidden h-[60%] -translate-y-1/2 flex-col items-center lg:left-6 lg:flex"
         aria-label="Choose destination"
       >
         <div className="relative flex flex-1 flex-col items-center justify-between">
-          <span className="absolute top-2 bottom-2 w-px bg-white/25" aria-hidden="true" />
+          <span className="absolute top-2 bottom-2 w-px bg-ink/25" aria-hidden="true" />
           {slides.map((slide, i) => {
             const isActive = i === safeIndex;
             return (
@@ -142,8 +142,8 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                 <span
                   className={`size-2 rounded-full transition-all duration-300 ${
                     isActive
-                      ? "scale-125 bg-blue-500 ring-4 ring-blue-500/20"
-                      : "bg-white/55 group-hover:scale-125 group-hover:bg-white"
+                      ? "scale-125 bg-brand-hover ring-4 ring-brand-hover/20"
+                      : "bg-ink/55 group-hover:scale-125 group-hover:bg-ink"
                   }`}
                 />
               </button>
@@ -170,27 +170,27 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
               className="max-w-[540px] lg:max-w-[480px] xl:max-w-[500px] 3xl:max-w-[540px]"
             >
               <div className="mb-5 flex items-center gap-3">
-                <span className="rounded-md bg-blue-600 px-2.5 py-1 text-[10px] font-bold tracking-[0.14em]">
+                <span className="rounded-md bg-brand px-2.5 py-1 text-[10px] font-bold tracking-[0.14em]">
                   {current.tag}
                 </span>
-                <span className="h-px w-10 bg-white/50" />
-                <span className="text-[10px] font-semibold tracking-[0.18em] text-white/65">
+                <span className="h-px w-10 bg-ink/50" />
+                <span className="text-[10px] font-semibold tracking-[0.18em] text-ink/65">
                   THE WORLD IS YOURS
                 </span>
               </div>
 
-              <h1 className="max-w-[680px] text-4xl font-black leading-[0.94] tracking-[-0.055em] text-white sm:text-5xl md:text-6xl lg:text-[64px] xl:text-7xl 3xl:text-[88px]">
+              <h1 className="max-w-[680px] text-4xl font-black leading-[0.94] tracking-[-0.055em] text-ink sm:text-5xl md:text-6xl lg:text-[64px] xl:text-7xl 3xl:text-[88px]">
                 {current.title}
               </h1>
 
-              <p className="mt-6 max-w-lg text-sm leading-relaxed text-white/75 md:text-base">
+              <p className="mt-6 max-w-lg text-sm leading-relaxed text-ink/75 md:text-base">
                 {current.description}
               </p>
 
               <div className="mt-7">
                 <button
                   type="button"
-                  className="inline-flex items-center gap-3 rounded-xl bg-blue-600 px-7 py-3.5 text-xs font-bold tracking-wide text-white shadow-lg shadow-blue-600/30 transition hover:bg-blue-500"
+                  className="inline-flex items-center gap-3 rounded-xl bg-brand px-7 py-3.5 text-xs font-bold tracking-wide text-ink shadow-lg shadow-brand/30 transition hover:bg-brand-hover"
                 >
                   {current.ctaText}
                   <ArrowRight className="size-4" aria-hidden="true" />
@@ -210,7 +210,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
-            className="text-sm font-bold text-white/60 transition hover:text-white"
+            className="text-sm font-bold text-ink/60 transition hover:text-ink"
           >
             <span aria-hidden="true">f</span>
           </a>
@@ -219,7 +219,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter"
-            className="text-xs font-bold text-white/60 transition hover:text-white"
+            className="text-xs font-bold text-ink/60 transition hover:text-ink"
           >
             <span aria-hidden="true">𝕏</span>
           </a>
@@ -228,12 +228,12 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="text-base font-semibold text-white/60 transition hover:text-white"
+            className="text-base font-semibold text-ink/60 transition hover:text-ink"
           >
             <span aria-hidden="true">◎</span>
           </a>
-          <span className="ml-1 hidden h-px w-10 bg-white/30 sm:block" />
-          <span className="hidden text-[9px] font-semibold tracking-[0.18em] text-white/45 sm:block">
+          <span className="ml-1 hidden h-px w-10 bg-ink/30 sm:block" />
+          <span className="hidden text-[9px] font-semibold tracking-[0.18em] text-ink/45 sm:block">
             FOLLOW THE JOURNEY
           </span>
         </div>
@@ -268,7 +268,7 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                 type="button"
                 onClick={prevSlide}
                 aria-label="Previous destination"
-                className="grid size-10 place-items-center rounded-full border border-white/15 bg-white/15 text-white backdrop-blur-md transition hover:bg-white/25"
+                className="grid size-10 place-items-center rounded-full border border-ink/15 bg-ink/15 text-ink backdrop-blur-md transition hover:bg-ink/25"
               >
                 <ArrowLeft className="size-4" aria-hidden="true" />
               </button>
@@ -276,22 +276,22 @@ export function HeroCarousel({ slides = DEFAULT_SLIDES }: { slides?: SlideItem[]
                 type="button"
                 onClick={nextSlide}
                 aria-label="Next destination"
-                className="grid size-10 place-items-center rounded-full border border-white/15 bg-white/15 text-white backdrop-blur-md transition hover:bg-white/25"
+                className="grid size-10 place-items-center rounded-full border border-ink/15 bg-ink/15 text-ink backdrop-blur-md transition hover:bg-ink/25"
               >
                 <ArrowRight className="size-4" aria-hidden="true" />
               </button>
             </div>
 
-            <div className="flex items-center gap-3 text-[10px] font-semibold tracking-[0.16em] text-white/65">
+            <div className="flex items-center gap-3 text-[10px] font-semibold tracking-[0.16em] text-ink/65">
               <span>{pad2(safeIndex + 1)}</span>
-              <span className="h-px w-16 bg-white/45" />
+              <span className="h-px w-16 bg-ink/45" />
               <span>{pad2(slideCount)}</span>
               <ArrowDown className="ml-1 size-3" aria-hidden="true" />
             </div>
           </div>
         </section>
       </div>
-    </main>
+    </section>
   );
 }
 

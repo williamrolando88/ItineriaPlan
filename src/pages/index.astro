@@ -1,22 +1,5 @@
 ---
-import '../styles/global.css';
-import HeroCarousel from '../components/HeroCarousel';
+import LandingPage from '../components/landing/LandingPage.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>ItineriaPlan — Find Your Next Journey</title>
-		<meta
-			name="description"
-			content="Discover extraordinary destinations with ItineriaPlan. Explore curated journeys from Bali to Iceland."
-		/>
-	</head>
-	<body class="bg-slate-950 text-white antialiased">
-		<HeroCarousel client:load />
-	</body>
-</html>
+<LandingPage />

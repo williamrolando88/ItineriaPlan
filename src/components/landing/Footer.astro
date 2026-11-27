@@ -1,0 +1,42 @@
+---
+import { BrandIcon } from './BrandIcon';
+import { NAV_LINKS } from '../../data/hero';
+
+const year = new Date().getFullYear();
+---
+
+<footer
+	id="contact"
+	class="border-t border-ink/10 bg-surface px-6 py-12 text-ink md:px-8 lg:px-10"
+>
+	<div class="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
+		<div class="flex flex-col gap-3">
+			<a
+				href="#top"
+				class="flex items-center gap-2.5 text-sm font-black tracking-[0.2em]"
+				aria-label="ItineriaPlan home"
+			>
+				<BrandIcon />
+				ITINERIA
+			</a>
+			<p class="max-w-xs text-xs leading-relaxed text-ink/55">
+				Curated journeys and bespoke travel itineraries across the world.
+			</p>
+		</div>
+
+		<nav class="flex flex-wrap gap-6 text-sm text-ink/65" aria-label="Footer navigation">
+			{
+				NAV_LINKS.map((link) => (
+					<a href={link.href} class="transition hover:text-ink">
+						{link.label}
+					</a>
+				))
+			}
+		</nav>
+	</div>
+
+	<div class="mx-auto mt-10 flex max-w-6xl flex-col gap-2 border-t border-ink/10 pt-6 text-xs text-ink/45 sm:flex-row sm:items-center sm:justify-between">
+		<span>&copy; {year} ItineriaPlan. All rights reserved.</span>
+		<span>Placeholder footer — ready for contact details & legal links.</span>
+	</div>
+</footer>

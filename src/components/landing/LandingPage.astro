@@ -1,0 +1,31 @@
+---
+import '../../styles/global.css';
+import { NAV_LINKS } from '../../data/hero';
+import { Navbar } from './Navbar';
+import HeroCarousel from './HeroCarousel';
+import ReviewsCarousel from './ReviewsCarousel';
+import Footer from './Footer.astro';
+---
+
+<html lang="en" class="scroll-smooth">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>ItineriaPlan — Find Your Next Journey</title>
+		<meta
+			name="description"
+			content="Discover extraordinary destinations with ItineriaPlan. Explore curated journeys from Bali to Iceland."
+		/>
+	</head>
+	<body class="bg-surface text-ink antialiased">
+		<Navbar links={NAV_LINKS} client:load />
+		<main>
+			<HeroCarousel client:load />
+			<ReviewsCarousel client:visible />
+		</main>
+		<Footer />
+	</body>
+</html>

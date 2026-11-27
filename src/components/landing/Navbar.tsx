@@ -2,15 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { BrandIcon } from "./BrandIcon";
-import type { NavLink } from "../data/hero";
+import { NAV_LINKS, type NavLink } from "../../data/hero";
 
 interface NavbarProps {
-  links: NavLink[];
-  menuOpen: boolean;
-  onMenuOpenChange: (open: boolean) => void;
+  links?: NavLink[];
 }
 
-export function Navbar({ links, menuOpen, onMenuOpenChange }: NavbarProps) {
+export function Navbar({ links = NAV_LINKS }: NavbarProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [selectedNav, setSelectedNav] = useState<string | null>(null);
   const reduceMotion = useReducedMotion();
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
@@ -28,7 +27,7 @@ export function Navbar({ links, menuOpen, onMenuOpenChange }: NavbarProps) {
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onMenuOpenChange(false);
+        setMenuOpen(false);
         toggleBtnRef.current?.focus();
       }
     };
@@ -41,7 +40,7 @@ export function Navbar({ links, menuOpen, onMenuOpenChange }: NavbarProps) {
       ) {
         return;
       }
-      onMenuOpenChange(false);
+      setMenuOpen(false);
     };
 
     window.addEventListener("keydown", onKeyDown);
@@ -50,11 +49,11 @@ export function Navbar({ links, menuOpen, onMenuOpenChange }: NavbarProps) {
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("pointerdown", onPointerDown);
     };
-  }, [menuOpen, onMenuOpenChange]);
+  }, [menuOpen]);
 
   return (
     <>
-      <header className="relative z-20 flex items-center justify-between px-6 py-6 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-10">
+      <header className="fixed inset-x-0 top-0 z-30 flex items-center justify-between bg-gradient-to-b from-surface/80 to-transparent px-6 py-6 md:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-10">
         <a
           href="#top"
           className="flex items-center gap-2.5 justify-self-start text-sm font-black tracking-[0.2em]"
@@ -65,11 +64,11 @@ export function Navbar({ links, menuOpen, onMenuOpenChange }: NavbarProps) {
         </a>
 
         <nav
-          className="hidden items-center gap-10 justify-self-center text-sm font-medium text-white/70 md:flex"
+          className="hidden items-center gap-10 justify-self-center text-sm font-medium text-ink/70 md:flex"
           aria-label="Main navigation"
         >
           {links.map((link) => (
-            <a key={link.href} className="transition hover:text-white" href={link.href}>
+            <a key={link.href} className="transition hover:text-ink" href={link.href}>
               {link.label}
             </a>
           ))}
@@ -81,8 +80,8 @@ export function Navbar({ links, menuOpen, onMenuOpenChange }: NavbarProps) {
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           aria-controls="mobile-nav-drawer"
-          onClick={() => onMenuOpenChange(!menuOpen)}
-          className="grid size-10 place-items-center rounded-full border border-white/25 bg-white/10 transition hover:bg-white/20 md:hidden"
+          onClick={() => setMenuOpen((prev) => !prev)}
+          className="grid size-10 place-items-center rounded-full border border-ink/25 bg-ink/10 transition hover:bg-ink/20 md:hidden"
         >
           {menuOpen ? (
             <X className="size-5" aria-hidden="true" />
@@ -103,7 +102,7 @@ export function Navbar({ links, menuOpen, onMenuOpenChange }: NavbarProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
             transition={{ duration: reduceMotion ? 0.1 : 0.2 }}
-            className="absolute right-6 top-20 z-30 flex w-max flex-col items-end gap-1 rounded-2xl border border-white/15 bg-slate-950/90 p-3 text-right backdrop-blur-xl md:hidden"
+            className="fixed right-6 top-20 z-30 flex w-max flex-col items-end gap-1 rounded-2xl border border-ink/15 bg-surface/90 p-3 text-right backdrop-blur-xl md:hidden"
             aria-label="Mobile navigation"
           >
             {links.map((link) => {
@@ -118,14 +117,14 @@ export function Navbar({ links, menuOpen, onMenuOpenChange }: NavbarProps) {
                     setSelectedNav(link.href);
                     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
                     closeTimerRef.current = setTimeout(() => {
-                      onMenuOpenChange(false);
+                      setMenuOpen(false);
                       setSelectedNav(null);
                     }, 200);
                   }}
                   className={`block w-full rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200 ${
                     isSelected
-                      ? "bg-white/20 text-white"
-                      : "text-white/80 hover:bg-white/10 hover:text-white"
+                      ? "bg-ink/20 text-ink"
+                      : "text-ink/80 hover:bg-ink/10 hover:text-ink"
                   }`}
                 >
                   {link.label}
