@@ -4,6 +4,9 @@ import { COPY, getNavLinks, type Locale } from '../../i18n/translations';
 import { getSlides } from '../../data/hero';
 import { Navbar } from './Navbar';
 import HeroCarousel from './HeroCarousel';
+import HowItWorks from './HowItWorks.astro';
+import DestinationsGrid from './DestinationsGrid.astro';
+import QuoteAndAccess from './QuoteAndAccess.astro';
 import ReviewsCarousel from './ReviewsCarousel';
 import Footer from './Footer.astro';
 
@@ -31,6 +34,9 @@ const slides = getSlides(locale);
 		<Navbar links={navLinks} locale={locale} client:load />
 		<main>
 			<HeroCarousel slides={slides} locale={locale} client:load />
+			<HowItWorks locale={locale} />
+			<DestinationsGrid locale={locale} />
+			<QuoteAndAccess locale={locale} />
 			<ReviewsCarousel locale={locale} client:visible />
 		</main>
 		<Footer locale={locale} />

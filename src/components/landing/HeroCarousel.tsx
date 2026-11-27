@@ -195,14 +195,20 @@ export function HeroCarousel({
                 {current.description}
               </p>
 
-              <div className="mt-7">
-                <button
-                  type="button"
+              <div className="mt-4 flex flex-wrap items-center gap-2 text-[11px] font-semibold tracking-wide text-ink/60">
+                <span>{current.duration}</span>
+                <span aria-hidden="true">·</span>
+                <span>{current.styleLabel}</span>
+              </div>
+
+              <div className="mt-6">
+                <a
+                  href="#quote"
                   className="inline-flex items-center gap-3 rounded-xl bg-brand px-7 py-3.5 text-xs font-bold tracking-wide text-ink shadow-lg shadow-brand/30 transition hover:bg-brand-hover"
                 >
                   {current.ctaText}
                   <ArrowRight className="size-4" aria-hidden="true" />
-                </button>
+                </a>
               </div>
             </motion.div>
           </AnimatePresence>

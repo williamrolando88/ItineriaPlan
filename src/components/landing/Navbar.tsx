@@ -81,6 +81,18 @@ export function Navbar({ links = NAV_LINKS, locale = "en" }: NavbarProps) {
 
         <div className="flex items-center gap-3 justify-self-end">
           <a
+            href="#itinerary-access"
+            className="hidden text-xs font-semibold text-ink/75 transition hover:text-ink lg:inline-block"
+          >
+            {t.myItinerary}
+          </a>
+          <a
+            href="#quote"
+            className="hidden rounded-full bg-brand px-4 py-1.5 text-xs font-bold text-ink transition hover:bg-brand-hover md:inline-block"
+          >
+            {t.planTrip}
+          </a>
+          <a
             href={otherHref}
             aria-label={`Switch language to ${otherLocale.toUpperCase()}`}
             className="rounded-full border border-ink/20 bg-ink/10 px-3 py-1.5 text-[11px] font-bold tracking-wider text-ink/85 transition hover:bg-ink/20 hover:text-ink"

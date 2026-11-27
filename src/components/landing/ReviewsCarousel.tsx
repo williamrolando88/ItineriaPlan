@@ -23,13 +23,19 @@ export function ReviewsCarousel({ locale = "en" }: { locale?: Locale }) {
         </p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {[1, 2, 3].map((item) => (
-            <div
-              key={item}
-              className="rounded-2xl border border-dashed border-ink/15 bg-ink/[0.03] p-6 text-sm text-ink/40"
+          {t.items.map((item) => (
+            <figure
+              key={item.author}
+              className="flex flex-col justify-between rounded-2xl border border-ink/10 bg-surface-elevated/45 p-6"
             >
-              {t.cardPlaceholder} {item}
-            </div>
+              <blockquote className="text-sm leading-relaxed text-ink/80">
+                “{item.quote}”
+              </blockquote>
+              <figcaption className="mt-6 border-t border-ink/10 pt-4 text-xs">
+                <span className="block font-bold text-ink">{item.author}</span>
+                <span className="text-ink/50">{item.trip}</span>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </div>

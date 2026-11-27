@@ -7,6 +7,18 @@ export const LOCALE_LABELS: Record<Locale, string> = {
   es: "ES",
 };
 
+export interface StepItem {
+  number: string;
+  title: string;
+  description: string;
+}
+
+export interface ReviewItem {
+  quote: string;
+  author: string;
+  trip: string;
+}
+
 export interface Copy {
   meta: {
     title: string;
@@ -18,6 +30,8 @@ export interface Copy {
     mobileAria: string;
     openMenu: string;
     closeMenu: string;
+    myItinerary: string;
+    planTrip: string;
     links: {
       destinations: string;
       howItWorks: string;
@@ -40,17 +54,51 @@ export interface Copy {
     bookmark: string;
     removeBookmark: string;
   };
+  howItWorks: {
+    eyebrow: string;
+    heading: string;
+    subtitle: string;
+    pricingNote: string;
+    steps: StepItem[];
+  };
+  destinations: {
+    eyebrow: string;
+    heading: string;
+    subtitle: string;
+    quoteCta: string;
+  };
+  quoteAndAccess: {
+    quoteEyebrow: string;
+    quoteHeading: string;
+    quoteSubtitle: string;
+    destinationLabel: string;
+    datesLabel: string;
+    datesPlaceholder: string;
+    travelersLabel: string;
+    tierLabel: string;
+    tiers: string[];
+    submitCta: string;
+    accessEyebrow: string;
+    accessHeading: string;
+    accessSubtitle: string;
+    codeLabel: string;
+    codePlaceholder: string;
+    accessCta: string;
+    accessHint: string;
+  };
   reviews: {
     eyebrow: string;
     heading: string;
     subtitle: string;
-    cardPlaceholder: string;
+    items: ReviewItem[];
   };
   footer: {
     navAria: string;
     tagline: string;
+    contactLabel: string;
+    email: string;
+    hours: string;
     rights: string;
-    placeholderNote: string;
   };
 }
 
@@ -67,6 +115,8 @@ export const COPY: Record<Locale, Copy> = {
       mobileAria: "Mobile navigation",
       openMenu: "Open menu",
       closeMenu: "Close menu",
+      myItinerary: "My Itinerary",
+      planTrip: "Plan Trip",
       links: {
         destinations: "Destinations",
         howItWorks: "How it works",
@@ -89,17 +139,95 @@ export const COPY: Record<Locale, Copy> = {
       bookmark: "Bookmark",
       removeBookmark: "Remove bookmark for",
     },
+    howItWorks: {
+      eyebrow: "TAILORED PROCESS",
+      heading: "How your trip comes together",
+      subtitle:
+        "Every journey is built from scratch around your pace, dates, and budget tier.",
+      pricingNote:
+        "Market rates shift daily—we quote live availability so you never pay inflated static markups.",
+      steps: [
+        {
+          number: "01",
+          title: "Share your vision",
+          description:
+            "Tell us where you want to go, approximate dates, who is traveling, and your preferred comfort level.",
+        },
+        {
+          number: "02",
+          title: "Receive a live custom quote",
+          description:
+            "We design a day-by-day itinerary with curated stays and real-time market pricing with clear validity.",
+        },
+        {
+          number: "03",
+          title: "Refine via private link",
+          description:
+            "Review your itinerary with your group using an anonymous access code—no account needed—and confirm when ready.",
+        },
+      ],
+    },
+    destinations: {
+      eyebrow: "CURATED INSPIRATION",
+      heading: "Destinations built around you",
+      subtitle:
+        "Suggested durations and styles—each route is adapted to your dates and preferences.",
+      quoteCta: "Request quote",
+    },
+    quoteAndAccess: {
+      quoteEyebrow: "BESPOKE QUOTE",
+      quoteHeading: "Start planning your journey",
+      quoteSubtitle:
+        "No fixed packages. Tell us what matters and we will craft your custom route.",
+      destinationLabel: "Destination or region",
+      datesLabel: "Approximate dates",
+      datesPlaceholder: "e.g. Oct 2026 · Flexible 10 days",
+      travelersLabel: "Travelers",
+      tierLabel: "Comfort tier",
+      tiers: ["Essential", "Boutique", "Luxury"],
+      submitCta: "Request custom quote",
+      accessEyebrow: "CLIENT PORTAL",
+      accessHeading: "Open your itinerary or quote",
+      accessSubtitle:
+        "Already working with us? Enter your private quote code—no password required.",
+      codeLabel: "Access code",
+      codePlaceholder: "e.g. ITN-4829",
+      accessCta: "View itinerary",
+      accessHint: "Private link access keeps your quote details protected without creating an account.",
+    },
     reviews: {
       eyebrow: "TRAVELER STORIES",
-      heading: "Reviews Carousel",
-      subtitle: "Placeholder for upcoming traveler reviews and testimonials carousel.",
-      cardPlaceholder: "Review card placeholder",
+      heading: "Crafted for real journeys",
+      subtitle:
+        "What travelers say about planning custom routes and live quotes with ItineriaPlan.",
+      items: [
+        {
+          quote:
+            "Having a private link to share our Japan itinerary with my family made every change effortless—zero back-and-forth PDFs.",
+          author: "Camila R.",
+          trip: "Kyoto & Tokyo · 12 days",
+        },
+        {
+          quote:
+            "They adapted our Peru route twice as flight prices shifted and still kept the boutique lodges we wanted.",
+          author: "Daniel M.",
+          trip: "Sacred Valley & Machu Picchu · 8 days",
+        },
+        {
+          quote:
+            "Everything from aurora timing in Iceland to private transfers was clear before we paid a single deposit.",
+          author: "Sofía & Lucas",
+          trip: "Reykjavik & South Coast · 7 days",
+        },
+      ],
     },
     footer: {
       navAria: "Footer navigation",
       tagline: "Curated journeys and bespoke travel itineraries across the world.",
+      contactLabel: "Direct concierge",
+      email: "hello@itineriaplan.com",
+      hours: "Mon–Sat · Live quote support",
       rights: "All rights reserved.",
-      placeholderNote: "Placeholder footer — ready for contact details & legal links.",
     },
   },
   es: {
@@ -114,6 +242,8 @@ export const COPY: Record<Locale, Copy> = {
       mobileAria: "Navegación móvil",
       openMenu: "Abrir menú",
       closeMenu: "Cerrar menú",
+      myItinerary: "Mi Itinerario",
+      planTrip: "Cotizar",
       links: {
         destinations: "Destinos",
         howItWorks: "Cómo funciona",
@@ -136,17 +266,95 @@ export const COPY: Record<Locale, Copy> = {
       bookmark: "Guardar",
       removeBookmark: "Quitar de guardados",
     },
+    howItWorks: {
+      eyebrow: "PROCESO A MEDIDA",
+      heading: "Cómo armamos tu viaje",
+      subtitle:
+        "Cada itinerario se diseña desde cero según tu ritmo, fechas y nivel de viaje.",
+      pricingNote:
+        "Las tarifas del mercado cambian a diario; cotizamos con disponibilidad real para no inflar precios fijos.",
+      steps: [
+        {
+          number: "01",
+          title: "Cuéntanos tu idea",
+          description:
+            "Compártenos destino, fechas aproximadas, quiénes viajan y el estilo de hospedaje que prefieres.",
+        },
+        {
+          number: "02",
+          title: "Recibe tu cotización real",
+          description:
+            "Armamos tu itinerario día por día con opciones curadas y tarifa vigente al momento de cotizar.",
+        },
+        {
+          number: "03",
+          title: "Revisa con acceso privado",
+          description:
+            "Abre y comparte tu itinerario con tu grupo usando un código único—sin crear cuenta—y confirma cuando estés listo.",
+        },
+      ],
+    },
+    destinations: {
+      eyebrow: "INSPIRACIÓN CURADA",
+      heading: "Destinos adaptados a ti",
+      subtitle:
+        "Duraciones y estilos sugeridos; cada ruta se ajusta a tus fechas y presupuesto.",
+      quoteCta: "Cotizar ruta",
+    },
+    quoteAndAccess: {
+      quoteEyebrow: "COTIZACIÓN A MEDIDA",
+      quoteHeading: "Empieza a planear tu viaje",
+      quoteSubtitle:
+        "Sin paquetes rígidos. Dinos qué buscas y preparamos tu ruta personalizada.",
+      destinationLabel: "Destino o región",
+      datesLabel: "Fechas aproximadas",
+      datesPlaceholder: "Ej. Oct 2026 · 10 días flexibles",
+      travelersLabel: "Viajeros",
+      tierLabel: "Nivel de experiencia",
+      tiers: ["Esencial", "Boutique", "Luxury"],
+      submitCta: "Solicitar cotización",
+      accessEyebrow: "PORTAL DE CLIENTES",
+      accessHeading: "Abre tu itinerario o cotización",
+      accessSubtitle:
+        "¿Ya tienes una propuesta con nosotros? Ingresa tu código privado sin contraseña.",
+      codeLabel: "Código de acceso",
+      codePlaceholder: "Ej. ITN-4829",
+      accessCta: "Ver itinerario",
+      accessHint: "El acceso por código protege tu cotización sin obligarte a crear una cuenta.",
+    },
     reviews: {
       eyebrow: "HISTORIAS DE VIAJEROS",
-      heading: "Reseñas de viajeros",
-      subtitle: "Espacio para próximas reseñas y testimonios de viajes a medida.",
-      cardPlaceholder: "Tarjeta de reseña",
+      heading: "Diseñado para viajes reales",
+      subtitle:
+        "Lo que cuentan nuestros viajeros sobre planear rutas y cotizaciones a medida.",
+      items: [
+        {
+          quote:
+            "Tener un enlace privado para revisar el itinerario de Japón en familia hizo cada ajuste súper rápido, sin PDFs eternos.",
+          author: "Camila R.",
+          trip: "Kioto y Tokio · 12 días",
+        },
+        {
+          quote:
+            "Ajustaron nuestra ruta en Perú cuando cambiaron los vuelos y lograron mantener los hoteles boutique que queríamos.",
+          author: "Daniel M.",
+          trip: "Valle Sagrado y Machu Picchu · 8 días",
+        },
+        {
+          quote:
+            "Todo desde las ventanas de auroras en Islandia hasta los traslados estuvo claro antes de confirmar.",
+          author: "Sofía y Lucas",
+          trip: "Reikiavik y Costa Sur · 7 días",
+        },
+      ],
     },
     footer: {
       navAria: "Navegación del pie de página",
       tagline: "Viajes curados e itinerarios a medida alrededor del mundo.",
+      contactLabel: "Asesoría directa",
+      email: "hello@itineriaplan.com",
+      hours: "Lun–Sáb · Cotizaciones en vivo",
       rights: "Todos los derechos reservados.",
-      placeholderNote: "Pie de página provisional — listo para contacto y legales.",
     },
   },
 };
