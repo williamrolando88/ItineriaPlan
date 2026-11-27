@@ -1,0 +1,34 @@
+---
+import '../../styles/global.css';
+import { COPY, getNavLinks, type Locale } from '../../i18n/translations';
+import { Navbar } from '../landing/Navbar';
+import Footer from '../landing/Footer.astro';
+import { ItineraryPortal } from './ItineraryPortal';
+
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = 'en' } = Astro.props;
+const copy = COPY[locale];
+const navLinks = getNavLinks(locale, true);
+---
+
+<html lang={locale} class="scroll-smooth">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>{copy.nav.myItinerary} — ItineriaPlan</title>
+	</head>
+	<body class="bg-surface text-ink antialiased">
+		<Navbar links={navLinks} locale={locale} isSubpage={true} client:load />
+		<main>
+			<ItineraryPortal locale={locale} client:load />
+		</main>
+		<Footer locale={locale} />
+	</body>
+</html>
